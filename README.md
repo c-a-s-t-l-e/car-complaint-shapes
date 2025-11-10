@@ -10,11 +10,11 @@ Our Objective:
 
 As measured by our key results:
 
-**- 1 Data Pipeline**
+**- 1 Data Pipeline Using the {targets} Package**
 
 **- 1 Shiny Web Applcation for Data Exploration**
 
-**- 1 Conclusive Report on the Findings**
+**- 1 Conclusive Report on the Findings Using Quarto**
 
 ---
 
