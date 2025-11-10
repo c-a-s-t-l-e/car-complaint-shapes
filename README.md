@@ -10,14 +10,18 @@ Our Objective:
 
 As measured by our key results:
 
-**1 Data Pipeline**
-**1 Shiny Web Applcation for Data Exploration**
-**1 Conclusive Report on the Findings**
+**- 1 Data Pipeline**
 
-How this looks like in practice is:
+**- 1 Shiny Web Applcation for Data Exploration**
 
-- data collection
-- data cleaning
-- data analysis by means of tree maps and chronological frequency line plots
-- app creation
-- conclusion report writing
+**- 1 Conclusive Report on the Findings**
+
+---
+
+Steps included are:
+
+- Data Collection
+- Data Cleaning
+- Data Analysis by Means of Tree Maps and Chronological Frequency Line Plots
+- App Creation
+- Conclusion Report Writing
