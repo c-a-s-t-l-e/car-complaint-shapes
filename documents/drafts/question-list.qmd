@@ -1,0 +1,123 @@
+---
+title: "DSE 511 Question List"
+format: html
+editor: visual
+---
+
+## System Setup
+
+```{r, warning = FALSE, message = FALSE}
+library(readr)
+library(arrow)
+library(dplyr)
+library(ggplot2)
+
+# load data
+complaint_data <- read_parquet("../raw_data/complaint_data_2019_2024.parquet.gz")
+```
+
+## Q1 - Are more complaints happening over time?
+
+Answer: They are actually decreasing as time goes on; whether that's because the new cars have just been on the road less is something to be answered.
+
+```{r}
+# aggregate
+year_complaint_count <- complaint_data |> 
+  group_by(model_year) |> 
+  count()
+
+# plot
+ggplot(year_complaint_count, aes(x = model_year, y = n)) +
+  geom_col(fill = "blue") +
+  scale_x_continuous(
+    breaks = seq(min(year_complaint_count$model_year),
+                 max(year_complaint_count$model_year),
+                 by = 1)
+  ) +
+  labs(
+    title = "Complaints by Model Year",
+    x = "Model Year",
+    y = "Number of Complaints"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+    axis.title.x = element_text(margin = margin(t = 10)),
+    axis.title.y = element_text(margin = margin(r = 10))
+  )
+```
+
+------------------------------------------------------------------------
+
+## Q2 - Which parent companies receive the most complaints?
+
+Answer:
+
+```{r}
+
+
+```
+
+### Q2.1 - How do the complaints for parent companies trend over time?
+
+Answer:
+
+```{r}
+
+```
+
+------------------------------------------------------------------------
+
+## Q3 - Which components receive the most complaints?
+
+Answer:
+
+```{r}
+
+```
+
+### Q3.1 - How do the complaints for components trend over time?
+
+Answer:
+
+```{r}
+
+```
+
+### Q3.2 - How do the complaints for popular components trend over time?
+
+Answer:
+
+```{r}
+
+```
+
+### Q3.3 - What topics are most common for the most popular components?
+
+Answer:
+
+```{r}
+
+```
+
+------------------------------------------------------------------------
+
+## Q4 - How do complaints around components and parent companies change over time spatially in the embedding space?
+
+Answer:
+
+```{r}
+
+```
+
+------------------------------------------------------------------------
+
+## Q5 - Are new cars getting worse?
+
+Answer:
+
+```{r}
+
+```
