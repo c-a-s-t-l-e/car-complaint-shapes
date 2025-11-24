@@ -13,7 +13,8 @@ library(dplyr)
 library(ggplot2)
 
 # load data
-complaint_data <- read_parquet("../raw_data/complaint_data_2019_2024.parquet.gz")
+complaint_data <- read_parquet("../../raw_data/complaint_data_2019_2024.parquet.gz")
+tr_results <- read_parquet("../../data_embeddings/topic_results.parquet")
 ```
 
 ## Q1 - Are more complaints happening over time?
@@ -68,9 +69,7 @@ Answer:
 
 ```
 
-------------------------------------------------------------------------
-
-## Q3 - Which components receive the most complaints?
+## Q3 - Which models receive the most complaints?
 
 Answer:
 
@@ -78,7 +77,8 @@ Answer:
 
 ```
 
-### Q3.1 - How do the complaints for components trend over time?
+
+### Q3.1 - For the worst models, how do their complaints trend over time?
 
 Answer:
 
@@ -86,37 +86,121 @@ Answer:
 
 ```
 
-### Q3.2 - How do the complaints for popular components trend over time?
+## Q4 - What are the most common topics?
 
 Answer:
 
 ```{r}
+tr_label_count <- tr_results |> 
+  filter(
+    topic != -1
+  ) |> 
+  group_by(topic, topic_label) |> 
+  count()
 
+
+ggplot(head(tr_label_count, 10), aes(x = reorder(topic_label, -n), y = n)) +
+  geom_col() +
+  labs(
+    x = NULL,
+    y = NULL
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 60, hjust = 1)
+  )
 ```
 
-### Q3.3 - What topics are most common for the most popular components?
-
-Answer:
+## Q4.1 - How do the top topics trend over time?
 
 ```{r}
+tr_label_count <- tr_results |> 
+  filter(
+    topic != -1
+  ) |> 
+  group_by(topic, topic_label) |> 
+  count()
 
+tr_year_label_count <- tr_results |> 
+  filter(
+    topic %in% head(tr_label_count$topic, 12) &
+    topic != -1
+  ) |> 
+  group_by(topic, topic_label, model_year) |> 
+  count() |> 
+  arrange(
+    desc(n)
+  )
+
+ggplot(tr_year_label_count, aes(x = model_year, y = n, fill = topic_label)) +
+  geom_col() +
+  facet_wrap(~ topic_label) + 
+  labs(
+    x = NULL,
+    y = NULL
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 60, hjust = 1)
+  )
 ```
 
-------------------------------------------------------------------------
-
-## Q4 - How do complaints around components and parent companies change over time spatially in the embedding space?
+### Q4.2 - What are the most common topics given a component?
 
 Answer:
 
 ```{r}
+tr_count <- tr_results |> 
+  filter(
+    topic != -1
+  ) |> 
+  group_by(topic, topic_label, components) |> 
+  count() |> 
+  arrange(
+    desc(n)
+  )
 
+
+ggplot(head(tr_count, 10), aes(x = reorder(topic_label, -n), y = n, fill = components)) +
+  geom_col() +
+  labs(
+    x = NULL,
+    y = NULL
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 60, hjust = 1)
+  )
+```
+# How do these trend over time?
+
+```{r}
+tr_year_count <- tr_results |> 
+  filter(
+    topic %in% head(tr_count$topic, 10) &
+    topic != -1
+  ) |> 
+  group_by(topic, topic_label, components, model_year) |> 
+  count() |> 
+  arrange(
+    desc(n)
+  )
+
+
+ggplot(tr_year_count, aes(x = model_year, y = n, fill = topic_label)) +
+  geom_col() +
+  facet_wrap(~ components) + 
+  labs(
+    x = NULL,
+    y = NULL
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 60, hjust = 1)
+  )
 ```
 
 ------------------------------------------------------------------------
 
 ## Q5 - Are new cars getting worse?
 
-Answer:
+Answer: Not necessarily, or at least from the complaints data, it seems like they are getting better...
 
 ```{r}
 
